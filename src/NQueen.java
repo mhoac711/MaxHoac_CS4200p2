@@ -1,7 +1,6 @@
 /**
- * 
+ * This purpose of this file is to solve the trials for the multiple n-queen problems
  */
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +11,9 @@ import java.util.Random;
 public class NQueen {
 	
 	class Coords{
-		int x; int y;
+		int x;
+		int y;
+
 		public Coords(int x, int y){
 			this.x = x;
 			this.y = y;
@@ -60,13 +61,13 @@ public class NQueen {
 
 	public void genRandConfig(){
 		Random rand = new Random();
-		int randx;
-		int randy;
+		int randX;
+		int randY;
 		for(int i = 0; i < board.getSize(); i++){
-			randx = Math.abs(rand.nextInt()%board.getSize());
-			randy = Math.abs(rand.nextInt()%board.getSize());
-			if(!checkQ(randx,randy))
-				placeQ(randx, randy);
+			randX = Math.abs(rand.nextInt()%board.getSize());
+			randY = Math.abs(rand.nextInt()%board.getSize());
+			if(!checkQ(randX,randY))
+				placeQ(randX, randY);
 			else
 				i--;
 		}
@@ -74,11 +75,11 @@ public class NQueen {
 	
 	public void genSemiRandConfig(){
 		Random rand = new Random();
-		int randy;
+		int randY;
 		for(int i = 0; i < board.getSize(); i++){
-			randy = Math.abs(rand.nextInt()%board.getSize());
-			if(!checkQ(i,randy))
-				placeQ(i, randy);
+			randY = Math.abs(rand.nextInt()%board.getSize());
+			if(!checkQ(i,randY))
+				placeQ(i, randY);
 			else
 				i--;
 		}
@@ -87,18 +88,16 @@ public class NQueen {
 	public void genSemiRandConfig(int size){
 		makeBoard(size);
 		Random rand = new Random();
-		int randy;
+		int randY;
 		for(int i = 0; i < board.getSize(); i++){
-			randy = Math.abs(rand.nextInt()%board.getSize());
-			if(!checkQ(i,randy))
-				placeQ(i, randy);
+			randY = Math.abs(rand.nextInt()%board.getSize());
+			if(!checkQ(i,randY))
+				placeQ(i, randY);
 			else
 				i--;
 		}
 	}
-	
 
-	
 	public void nTrials(int n, int size, int mode, int additional1, double additional2, int debug){
 		long startTime;
 		long endTime;
@@ -155,7 +154,6 @@ public class NQueen {
 		placeQ(value);
 	}
 
-	
 	public boolean checkQ(int x, int y){
 		return board.getTile(x, y).hasQ();
 	}
@@ -209,7 +207,6 @@ public class NQueen {
 		removeQ(variable.getX());
 	}
 
-	
 	public int getAllAttackers(){
 		int allAttackers = 0;
 		for(int i = 0; i < board.getSize(); i++){
@@ -224,14 +221,14 @@ public class NQueen {
 	
 	private int getAttackers(int x, int y){
 		int toReturn = 0;
-		toReturn += getColAtkers(x, y);
-		toReturn += getRowAtkers(x, y);
-		toReturn += getDiaAtkers(x, y);
+		toReturn += getColAttackers(x, y);
+		toReturn += getRowAttackers(x, y);
+		toReturn += getDiaAttackers(x, y);
 		board.getTile(x,y).setValue(toReturn);
 		return toReturn;
 	}
 	
-	private int getDiaAtkers(int x, int y) {
+	private int getDiaAttackers(int x, int y) {
 		int i = x; int j = y;
 		int attackers = 0;
 		while(i < board.getSize() && j < board.getSize()){ //downright
@@ -264,7 +261,7 @@ public class NQueen {
 		return attackers;
 	}
 
-	private int getRowAtkers(int x, int y) {
+	private int getRowAttackers(int x, int y) {
 		int attackers = 0;
 		for(int i = 0; i < board.getSize(); i++){
 			if(board.getTile(x, i).hasQ() && i != y && !counted(board.getTile(x, y), board.getTile(x,i)))
@@ -273,7 +270,7 @@ public class NQueen {
 		return attackers;
 	}
 
-	private int getColAtkers(int x, int y) {
+	private int getColAttackers(int x, int y) {
 		int attackers = 0;
 		for(int i = 0; i < board.getSize(); i++){
 			if(board.getTile(i, y).hasQ() && i != x && !counted(board.getTile(x, y), board.getTile(i,y)))
@@ -282,42 +279,46 @@ public class NQueen {
 		return attackers;
 	}
 	
-	private int incAttackers(int count, Tile uno, Tile dos){
+	private int incAttackers(int count, Tile first, Tile second){
 		count++;
-		if(map.get(uno) != null && map.get(dos) != null){
-			if(!map.get(uno).contains(dos) && !map.get(dos).contains(uno)){
-				map.get(uno).add(dos);
-				map.get(dos).add(uno);
+		if(map.get(first) != null && map.get(second) != null){
+			if(!map.get(first).contains(second) && !map.get(second).contains(first)){
+				map.get(first).add(second);
+				map.get(second).add(first);
 			}
-		}else if(map.get(uno) == null && map.get(dos) != null){
-			map.put(uno, new ArrayList<Tile>());
-			map.get(uno).add(dos);
-			map.get(dos).add(uno);
-		}else if(map.get(dos) == null && map.get(uno) != null){
-			map.put(dos, new ArrayList<Tile>());
-			map.get(uno).add(dos);
-			map.get(dos).add(uno);
+		}else if(map.get(first) == null && map.get(second) != null){
+			map.put(first, new ArrayList<Tile>());
+			map.get(first).add(second);
+			map.get(second).add(first);
+		}else if(map.get(second) == null && map.get(first) != null){
+			map.put(second, new ArrayList<Tile>());
+			map.get(first).add(second);
+			map.get(second).add(first);
 		}else{
-			map.put(uno, new ArrayList<Tile>());
-			map.put(dos, new ArrayList<Tile>());
-			map.get(uno).add(dos);
-			map.get(dos).add(uno);
+			map.put(first, new ArrayList<Tile>());
+			map.put(second, new ArrayList<Tile>());
+			map.get(first).add(second);
+			map.get(second).add(first);
 		}
 		return count;
 	}
 	
-	private boolean counted(Tile uno, Tile dos){
+	private boolean counted(Tile first, Tile second){
 		if(map.isEmpty())
 			return false;
-		else if(map.containsKey(uno))
-			if(map.get(uno).contains(dos))
+		else if(map.containsKey(first))
+			if(map.get(first).contains(second))
 				return true;
 			else
 				return false;
 		else
 			return false;
 	}
-	
+
+	/**
+	 * Runs a steepest-ascent hill-climbing algorithm with the given initial
+	 * state and returning the resulting states.
+	 */
 	public Node steepestHillClimbing(){
 		Node current;
 		Node neighbor;
@@ -359,8 +360,12 @@ public class NQueen {
 		Node best = boardQ.poll();
 		return best;
 	}
-	
-	
+
+	/**
+	 * Runs the minConflict algorithm
+	 * This function will choose a random column and calculate the heuristic for each of the coordinates within that column.
+	 * If it finds a heuristic that is less than or equal to the current heuristic the queen will be moved there
+	 */
 	public Node minConflicts(int maxSteps){
 		trials++;
 		Node current;
@@ -392,7 +397,6 @@ public class NQueen {
 		return current;
 	}
 
-
 	private Tile minimize(Tile variable) {
 		List<Tile> minimums = new ArrayList<Tile>();
 		int min = getAttackers(variable.getX(),variable.getY());
@@ -416,13 +420,12 @@ public class NQueen {
 			return variable;
 	}
 
-
 	private int getThreats(Tile variable) {
 		int x; int y; int toReturn = 0;
 		x = variable.getX();
 		y = variable.getY();
-		toReturn += getColAtkers(x,y);
-		toReturn += getDiaAtkers(x,y);
+		toReturn += getColAttackers(x,y);
+		toReturn += getDiaAttackers(x,y);
 		variable.setValue(toReturn);
 		map.clear();
 		return toReturn;
@@ -431,5 +434,4 @@ public class NQueen {
 	public long getTime() {
 		return this.avgTime;
 	}
-	
 }

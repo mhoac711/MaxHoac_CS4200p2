@@ -1,27 +1,22 @@
-/**
- * 
- */
 public class Board {
-
 	private Tile[][] board;
-	private int SIZE;
+	private int size;
 	
 	public Board(int n){
 		this.board = new Tile[n][n];
-		this.SIZE = n;
+		this.size = n;
 		initBoard();
 	}
 	
 	public Board(Board copy){
-		this.SIZE = copy.getSize();
+		this.size = copy.getSize();
 		this.board = copyBoard(copy);
 	}
 	
 	private Tile[][] copyBoard(Board copy) {
-		// TODO Auto-generated method stub
-		Tile[][] toReturn = new Tile[SIZE][SIZE];
-		for(int i = 0; i < SIZE; i++){
-			for(int j = 0; j < SIZE; j++){
+		Tile[][] toReturn = new Tile[size][size];
+		for(int i = 0; i < size; i++){
+			for(int j = 0; j < size; j++){
 				toReturn[i][j] = new Tile(copy.board[i][j]);
 			}
 		}
@@ -29,8 +24,8 @@ public class Board {
 	}
 
 	private void initBoard() {
-		for(int i = 0; i < SIZE; i++){
-			for(int j = 0; j < SIZE; j++){
+		for(int i = 0; i < size; i++){
+			for(int j = 0; j < size; j++){
 				board[i][j] = new Tile(i,j);
 			}
 		}
@@ -45,13 +40,17 @@ public class Board {
 	}
 	
 	public int getSize(){
-		return this.SIZE;
+		return this.size;
 	}
-	
+
+
+	/**
+	 * This function is used to show the completed boards of the n-queen problems
+	 */
 	public String toString(){
 		StringBuilder toReturn = new StringBuilder("");
-		for(int i = 0; i < SIZE; i++){
-			for(int j = 0; j < SIZE; j++){
+		for(int i = 0; i < size; i++){
+			for(int j = 0; j < size; j++){
 				if(getTile(i,j).hasQ())
 					toReturn.append("|Q|");
 				else
