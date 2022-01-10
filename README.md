@@ -1,5 +1,5 @@
 # MaxHoac_CS4200p2
-This is a program that utilizes the steepest hill climbing and the minimum conflicts algorithm to solve the n-queen problem. 
+This is a program that utilizes the Steepest Hill Climbing and the Minimum Conflicts algorithm to solve the N-Queen problem. 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 # How to use the code:
 1. Open the src folder in a designated java IDE 
