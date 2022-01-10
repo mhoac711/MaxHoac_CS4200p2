@@ -231,28 +231,28 @@ public class NQueen {
 	private int getDiaAttackers(int x, int y) {
 		int i = x; int j = y;
 		int attackers = 0;
-		while(i < board.getSize() && j < board.getSize()){ //downright
+		while(i < board.getSize() && j < board.getSize()){ //down-right
 			if(board.getTile(i, j).hasQ() && (i != x && j != y) && !counted(board.getTile(x, y), board.getTile(i, j)))
 				attackers = incAttackers(attackers, board.getTile(x, y), board.getTile(i, j));
 			i++;
 			j++;
 		}
 		i = x; j = y;
-		while(i < board.getSize() && j >= 0){ //downleft
+		while(i < board.getSize() && j >= 0){ //down-left
 			if(board.getTile(i, j).hasQ() && (i != x && j != y) && !counted(board.getTile(x, y), board.getTile(i, j)))
 				attackers = incAttackers(attackers, board.getTile(x, y), board.getTile(i, j));
 			i++;
 			j--;
 		}
 		i = x; j = y;
-		while(i >= 0 && j < board.getSize()){ //upright
+		while(i >= 0 && j < board.getSize()){ //up-right
 		if(board.getTile(i, j).hasQ() && (i != x && j != y) && !counted(board.getTile(x, y), board.getTile(i, j)))
 			attackers = incAttackers(attackers, board.getTile(x, y), board.getTile(i, j));
 			i--;
 			j++;
 		}
 		i = x; j = y;
-		while(i >= 0 && j >= 0){ //upleft
+		while(i >= 0 && j >= 0){ //up-left
 			if(board.getTile(i, j).hasQ() && (i != x && j != y) && !counted(board.getTile(x, y), board.getTile(i, j)))
 				attackers = incAttackers(attackers, board.getTile(x, y), board.getTile(i, j));
 			i--;
@@ -349,10 +349,9 @@ public class NQueen {
 					this.board = copy.board;			//focus on board
 					this.queens = copy.queens;			//get list of queens for that board
 					removeQ(i);							//remove queen in row i
-					placeQ(i,j);						//place queen in coord i,j
+					placeQ(i,j);						//move queen to coord i,j
 					copy.setValue(getAllAttackers());	//get new value
 					boardQ.add(copy);					//enqueue copy node
-					//System.out.println(copy.toString());
 					copy = new Node(current);			//make new copy
 				}
 			}

@@ -33,7 +33,7 @@ public class Node implements Comparable<Node> {
 	}
 	
 	@Override
-	public int compareTo(Node o) {
-		return Integer.compare(this.value, o.value);
+	public int compareTo(Node other) {
+		return Integer.compare(this.value, other.value);
 	}
 }
