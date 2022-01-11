@@ -1,5 +1,5 @@
 /**
- * This purpose of this file is to solve the trials for the multiple n-queen problems
+ * This file contains the implementations used to solve the trials for the N-Queen problems
  */
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.PriorityQueue;
 import java.util.Random;
 
 public class NQueen {
-	
+
 	class Coords{
 		int x;
 		int y;
@@ -51,42 +51,9 @@ public class NQueen {
 		queens = new ArrayList<Coords>(n);
 	}
 
-	public Board getBoard(){
-		return this.board;
-	}
 
-	public String getRep(){
-		return board.toString();
-	}
-
-	public void genRandConfig(){
-		Random rand = new Random();
-		int randX;
-		int randY;
-		for(int i = 0; i < board.getSize(); i++){
-			randX = Math.abs(rand.nextInt()%board.getSize());
-			randY = Math.abs(rand.nextInt()%board.getSize());
-			if(!checkQ(randX,randY))
-				placeQ(randX, randY);
-			else
-				i--;
-		}
-	}
 	
 	public void genSemiRandConfig(){
-		Random rand = new Random();
-		int randY;
-		for(int i = 0; i < board.getSize(); i++){
-			randY = Math.abs(rand.nextInt()%board.getSize());
-			if(!checkQ(i,randY))
-				placeQ(i, randY);
-			else
-				i--;
-		}
-	}
-	
-	public void genSemiRandConfig(int size){
-		makeBoard(size);
 		Random rand = new Random();
 		int randY;
 		for(int i = 0; i < board.getSize(); i++){
@@ -166,32 +133,14 @@ public class NQueen {
 			queens.add(x, new Coords(x,y));
 		}
 	}
-	
+
+	//This will move the queen to the new location
 	private void placeQ(Tile value) {
 		placeQ(value.getX(), value.getY());
 	}
-	
-	public void placeQ(Node current, int x, int y){
-		if(current.board.getTile(x, y).hasQ())
-			return;
-		else{
-			current.board.getTile(x, y).placeQ();
-			current.queens.add(x, new Coords(x,y));
-		}
-	}
-	
-	public void removeQ(int x, int y){
-		if(board.getTile(x, y).hasQ()){
-			board.getTile(x, y).removeQ();
-			queens.remove(x);
-			return;
-		}
-		else
-			return;
-	}
-	
+
+	//This will move the queen out of its current location
 	private void removeQ(int x) {
-		@SuppressWarnings("unused")
 		Coords coords;
 		for(int i = 0; i < board.getSize(); i++){
 			if(board.getTile(x, i).hasQ()){
@@ -202,12 +151,12 @@ public class NQueen {
 			}
 		}
 	}
-	
+
 	private void removeQ(Tile variable) {
 		removeQ(variable.getX());
 	}
 
-	public int getAllAttackers(){
+	public int getAttackers(){
 		int allAttackers = 0;
 		for(int i = 0; i < board.getSize(); i++){
 			for(int j = 0; j < board.getSize(); j++){
@@ -231,28 +180,29 @@ public class NQueen {
 	private int getDiaAttackers(int x, int y) {
 		int i = x; int j = y;
 		int attackers = 0;
-		while(i < board.getSize() && j < board.getSize()){ //down-right
+		while(i < board.getSize() && j < board.getSize()){ //bottom-right side
 			if(board.getTile(i, j).hasQ() && (i != x && j != y) && !counted(board.getTile(x, y), board.getTile(i, j)))
 				attackers = incAttackers(attackers, board.getTile(x, y), board.getTile(i, j));
 			i++;
 			j++;
 		}
 		i = x; j = y;
-		while(i < board.getSize() && j >= 0){ //down-left
+		while(i < board.getSize() && j >= 0){ //bottom-left side
 			if(board.getTile(i, j).hasQ() && (i != x && j != y) && !counted(board.getTile(x, y), board.getTile(i, j)))
 				attackers = incAttackers(attackers, board.getTile(x, y), board.getTile(i, j));
 			i++;
 			j--;
 		}
 		i = x; j = y;
-		while(i >= 0 && j < board.getSize()){ //up-right
+		while(i >= 0 && j < board.getSize()){ //upper-right side
 		if(board.getTile(i, j).hasQ() && (i != x && j != y) && !counted(board.getTile(x, y), board.getTile(i, j)))
 			attackers = incAttackers(attackers, board.getTile(x, y), board.getTile(i, j));
 			i--;
 			j++;
 		}
-		i = x; j = y;
-		while(i >= 0 && j >= 0){ //up-left
+		i = x;
+		j = y;
+		while(i >= 0 && j >= 0){ //upper-left side
 			if(board.getTile(i, j).hasQ() && (i != x && j != y) && !counted(board.getTile(x, y), board.getTile(i, j)))
 				attackers = incAttackers(attackers, board.getTile(x, y), board.getTile(i, j));
 			i--;
@@ -322,10 +272,10 @@ public class NQueen {
 	public Node steepestHillClimbing(){
 		Node current;
 		Node neighbor;
-		current = new Node(board, getAllAttackers(), (ArrayList<Coords>) queens);
+		current = new Node(board, getAttackers(), (ArrayList<Coords>) queens);
 		boardQ = new PriorityQueue<Node>();
 		while(true){
-			neighbor = genNeighbor(current);
+			neighbor = makeNeighbor(current);
 			if(neighbor.value >= current.value){
 				trials++;
 				if(current.value == 0){
@@ -339,18 +289,18 @@ public class NQueen {
 		}
 	}
 	
-	private Node genNeighbor(Node current) {
+	private Node makeNeighbor(Node current) {
 		Coords coords;
 		Node copy = new Node(current);
 		for(int i = 0; i < copy.board.getSize(); i++){
 			for(int j = 0; j < copy.board.getSize(); j++){
 				coords = new Coords(i,j);
 				if(!copy.board.getTile(i, j).hasQ()){
-					this.board = copy.board;			//focus on board
-					this.queens = copy.queens;			//get list of queens for that board
+					this.board = copy.board;			//copy status of the board
+					this.queens = copy.queens;			//place current queen locations in list
 					removeQ(i);							//remove queen in row i
-					placeQ(i,j);						//move queen to coord i,j
-					copy.setValue(getAllAttackers());	//get new value
+					placeQ(i,j);						//move queen to coords (i,j)
+					copy.setValue(getAttackers());		//get new value
 					boardQ.add(copy);					//enqueue copy node
 					copy = new Node(current);			//make new copy
 				}
@@ -372,7 +322,7 @@ public class NQueen {
 		Tile value;
 		boolean conflicted = false;
 		Random rand = new Random();
-		current = new Node(board, getAllAttackers(), (ArrayList<Coords>) queens);
+		current = new Node(board, getAttackers(), (ArrayList<Coords>) queens);
 		for(int i = 0; i < maxSteps; i++){
 			if(current.value == 0){
 				success++;
@@ -390,12 +340,13 @@ public class NQueen {
 			value = minimize(variable);
 			replaceQ(variable, value);
 			variable = value;
-			current.update(board, getAllAttackers(), (ArrayList<Coords>) queens);
+			current.update(board, getAttackers(), (ArrayList<Coords>) queens);
 			conflicted = false;
 		}
 		return current;
 	}
 
+	//This is a helper function to help find the least conflicted area for a queen to move
 	private Tile minimize(Tile variable) {
 		List<Tile> minimums = new ArrayList<Tile>();
 		int min = getAttackers(variable.getX(),variable.getY());

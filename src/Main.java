@@ -69,7 +69,9 @@ public class Main {
 	}
 
 	/**
-	 * This function will run the min conflict algorithm
+	 * This function will run the min conflict algorithm.
+	 * If customization is chosen, the user will have the additional ability to set a maximum number of steps
+	 * for the trial.
 	 */
 	private static void doCSP(Scanner sc, NQueen queen, int n, int boardsize, int debug, int def) {
 		int maxsteps = 0;
@@ -78,7 +80,7 @@ public class Main {
 			maxsteps = Integer.parseInt(sc.nextLine());
 		}
 		if(maxsteps == 0) {
-			maxsteps = 500;
+			maxsteps = 500; //default is set to 500
 			queen.nTrials(n, boardsize, 2, maxsteps, 0, debug);
 			System.out.println(queen.getReport());
 			printTime(queen);
@@ -103,7 +105,7 @@ public class Main {
 
 	private static void prompt() {
 		System.out.println("Enter type of search: \n"
-				+ "[1] Steepest Hill Climbing\n"
-				+ "[2] Minimum Conflicts (CSP)");
+				+ "1) Steepest Hill Climbing\n"
+				+ "2) Minimum Conflicts (CSP)");
 	}
 }

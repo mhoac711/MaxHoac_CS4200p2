@@ -1,3 +1,6 @@
+/**
+ * This file will be used to generate a game board that consist of several tiles,
+ */
 public class Board {
 	private Tile[][] board;
 	private int size;
@@ -31,8 +34,8 @@ public class Board {
 		}
 	}
 
-	public Tile getTile(int x, int y){
-		return board[x][y];
+	public Tile getTile(int i, int j){
+		return board[i][j];
 	}
 	
 	public Tile getTile(NQueen.Coords coords){
@@ -45,7 +48,7 @@ public class Board {
 
 
 	/**
-	 * This function is used to show the completed boards of the n-queen problems
+	 * This function will print the completed boards of the generated N-Queen problems
 	 */
 	public String toString(){
 		StringBuilder toReturn = new StringBuilder("");

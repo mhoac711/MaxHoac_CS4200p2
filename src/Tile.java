@@ -1,5 +1,6 @@
 /**
- * the purpose of this class is to generate the board spaces that the queen spaces will fill
+ * The purpose of this class is to generate the board spaces that the queen spaces will fill
+ * Tiles will be used to form the game board where each tile has coordinates (x,y)
  */
 public class Tile {
 	private boolean hasQ;
